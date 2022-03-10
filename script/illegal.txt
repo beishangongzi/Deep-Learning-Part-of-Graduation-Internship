@@ -1,0 +1,2 @@
+path: jietu/d219.jpg  error image 
+path: jietu/d226.jpg  error image
