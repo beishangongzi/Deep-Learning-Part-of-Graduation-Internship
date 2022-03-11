@@ -1,0 +1,24 @@
+26.400253176689148 Test loss (%)
+94.93243098258972 Test accuracy (%)
+
+                  precision    recall  f1-score   support
+
+         factory       0.75      0.86      0.80         7
+        farmland       0.00      0.00      0.00         6
+          forest       0.00      0.00      0.00         6
+       grassland       1.00      0.10      0.18        10
+            park       1.00      0.17      0.29         6
+residential area       1.00      0.50      0.67         6
+           water       0.95      1.00      0.98       551
+
+        accuracy                           0.95       592
+       macro avg       0.67      0.37      0.42       592
+    weighted avg       0.93      0.95      0.93       592
+
+[[  6   0   0   0   0   0   1]
+ [  0   0   0   0   0   0   6]
+ [  0   0   0   0   0   0   6]
+ [  0   0   0   1   0   0   9]
+ [  2   0   0   0   1   0   3]
+ [  0   0   0   0   0   3   3]
+ [  0   0   0   0   0   0 551]]
