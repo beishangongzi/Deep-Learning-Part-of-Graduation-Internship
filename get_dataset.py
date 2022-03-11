@@ -2,10 +2,6 @@ import os
 
 import numpy as np
 import tensorflow as tf
-from dotenv import load_dotenv
-
-
-load_dotenv()
 
 
 def get_dataset(data_root):

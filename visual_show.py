@@ -5,8 +5,7 @@ import tensorflow as tf
 from dotenv import load_dotenv
 from matplotlib import pyplot as plt
 
-export_path = "model/" + input("input the model name\n")
-load_dotenv()
+
 
 
 def predict_visuality(model_path, test_path):
@@ -52,8 +51,10 @@ def predict_visuality(model_path, test_path):
             plt.title(true_class_name[n] + " | " + predicted_class_names[n])
         plt.axis('off')
     _ = plt.suptitle("ImageNet predictions", )
-    plt.savefig(f"visual_show_images/res-{os.path.basename(export_path)}.png")
+    plt.savefig(f"visual_show_images/res-{os.path.basename(model_name)}.png")
 
 
 if __name__ == '__main__':
+    export_path = "model/" + input("input the model name\n")
+    load_dotenv()
     predict_visuality(export_path, os.getenv("data_root"))

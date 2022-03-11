@@ -2,11 +2,11 @@ import os
 
 import numpy as np
 import tensorflow as tf
-from dotenv import load_dotenv
+
 from sklearn.metrics import confusion_matrix, classification_report
 
-export_path = "model/" + input("input the model name\n")
-load_dotenv()
+
+
 
 
 def reports(X_test, y_test, model, target_names):
@@ -22,7 +22,7 @@ def reports(X_test, y_test, model, target_names):
     return classification, confusion, Test_Loss, Test_accuracy
 
 
-def predict_visuality(model_path, test_path):
+def predict_report(model_path, test_path):
     model_name = model_path.split("/")[-1]
     test_ds = tf.keras.utils.image_dataset_from_directory(
         test_path, labels='inferred', label_mode='int',
@@ -59,4 +59,7 @@ def predict_visuality(model_path, test_path):
 
 
 if __name__ == '__main__':
-    predict_visuality(export_path, os.getenv("data_root"))
+    from dotenv import load_dotenv
+    load_dotenv()
+    export_path = "model/" + input("input the model name\n")
+    predict_report(export_path, os.getenv("data_root"))
