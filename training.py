@@ -8,7 +8,7 @@ from keras import Model
 import get_dataset
 
 
-def training(model: Model, dataset=None, name=None):
+def training(model: Model, dataset=None):
     if dataset is None:
         dataset = os.getenv("data_root")
     if dataset is None:
@@ -32,7 +32,7 @@ def training(model: Model, dataset=None, name=None):
                         callbacks=tensorboard_callback)
 
     t = time.time()
-    export_path = "model/{}-{}".format(model.name if name is None else name, int(t))
+    export_path = "model/{}-{}".format(model.name, int(t))
     model.save(export_path)
     return export_path
 

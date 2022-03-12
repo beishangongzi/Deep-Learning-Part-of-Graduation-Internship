@@ -1,85 +1,52 @@
 import os
-from abc import ABC
 
+import keras
 import tensorflow as tf
 import tensorflow_hub as hub
 from environs import Env
-from keras import Model
-from keras.layers import Conv2D, Flatten, Dense
+from keras.layers import Conv2D
 
 env = Env()
 
 
-# class _Model():
-#     def __init__(self, class_names):
-#         self.class_names_number = len(class_names)
-#
-#     def pre_model(self, pre_model) -> keras.Model:
-#         # mobilenet_v2 ="https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4"
-#         mobilenet_v2 = "/media/andy/z/python/毕业实习/app/deep_learning/pre_model/" + pre_model
-#
-#         classifier_model = mobilenet_v2
-#
-#         feature_extractor_layer = hub.KerasLayer(
-#             classifier_model,
-#             input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3),
-#             trainable=False)
-#
-#         model = tf.keras.Sequential([
-#             # data_augmentation,
-#             feature_extractor_layer,
-#             tf.keras.layers.Dense(self.class_names_number)
-#         ])
-#
-#         # model.summary()
-#         return model
-#
-#     def res_net(self) -> keras.Model:
-#         pass
+def mobile_v3_transfer_model(pre_model):
+    mobilenet_v2 = env.str("model_dir") + pre_model
 
-class BaseModel(Model, ABC):
-    def __init__(self):
-        super(BaseModel, self).__init__()
-        self.d_last = Dense(7)
+    classifier_model = mobilenet_v2
 
-    @property
-    def name(self):
-        return self.__class__.__name__
+    feature_extractor_layer = hub.KerasLayer(
+        classifier_model,
+        input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3),
+        trainable=False)
+
+    model = tf.keras.Sequential([
+        # data_augmentation,
+        feature_extractor_layer,
+        keras.layers.Dense(int(os.getenv("num_class")))
+    ], name="mobile_v3_transfer_model-" + pre_model)
+
+    return model
 
 
-class MyModel(BaseModel, ABC):
-    def __init__(self):
-        super(MyModel, self).__init__()
-        self.conv1 = Conv2D(32, 3, activation='relu')
-        self.flatten = Flatten()
-        self.d1 = Dense(128, activation='relu')
+def toy_res_net():
+    inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3), name="img")
+    x = keras.layers.Conv2D(32, 3, activation="relu")(inputs)
+    x = keras.layers.Conv2D(64, 3, activation="relu")(x)
+    block_1_output = keras.layers.MaxPooling2D(3)(x)
 
-    def call(self, inputs, training=None, mask=None):
-        x = self.conv1(inputs)
-        x = self.flatten(x)
-        x = self.d1(x)
-        return self.d_last(x)
+    x = keras.layers.Conv2D(64, 3, activation="relu", padding="same")(block_1_output)
+    x = keras.layers.Conv2D(64, 3, activation="relu", padding="same")(x)
+    block_2_output = keras.layers.add([x, block_1_output])
 
+    x = keras.layers.Conv2D(64, 3, activation="relu", padding="same")(block_2_output)
+    x = keras.layers.Conv2D(64, 3, activation="relu", padding="same")(x)
+    block_3_output = keras.layers.add([x, block_2_output])
 
-class TransferLearningModel(BaseModel, ABC):
-    def __init__(self):
-        super().__init__()
-        self.d1 = Dense(7, activation="relu")
-
-    def call(self, pre_model, training=None, mask=None):
-        mobilenet_v2 = env.str("model_dir") + pre_model
-
-        classifier_model = mobilenet_v2
-
-        feature_extractor_layer = hub.KerasLayer(
-            classifier_model,
-            input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3),
-            trainable=False)
-
-        model = tf.keras.Sequential([
-            # data_augmentation,
-            feature_extractor_layer,
-            self.d_last
-        ])
-
-        return model
+    x = keras.layers.Conv2D(64, 3, activation="relu", padding="same")(block_3_output)
+    x = keras.layers.GlobalAvgPool2D()(x)
+    x = keras.layers.Dense(256, activation="relu")(x)
+    x = keras.layers.Dropout(0.5)(x)
+    outputs = keras.layers.Dense(int(os.getenv("num_class")))(x)
+    model = keras.Model(inputs, outputs, name="toy_resnet")
+    model.summary()
+    return model
