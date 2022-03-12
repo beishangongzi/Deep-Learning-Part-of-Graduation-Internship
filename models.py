@@ -28,7 +28,10 @@ def mobile_v3_transfer_model(pre_model):
     return model
 
 
-def toy_res_net():
+def toy_res_net(pre_model):
+    """
+    即使没有使用pre_model,也要声明，保持接口一致
+    """
     inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3), name="img")
     x = keras.layers.Conv2D(32, 3, activation="relu")(inputs)
     x = keras.layers.Conv2D(64, 3, activation="relu")(x)
