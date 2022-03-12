@@ -10,7 +10,7 @@ env = Env()
 
 
 def mobile_v3_transfer_model(pre_model):
-    mobilenet_v2 = env.str("model_dir") + pre_model
+    mobilenet_v2 = os.path.join(env.str("pre_model"), pre_model)
 
     classifier_model = mobilenet_v2
 

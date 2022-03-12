@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 
 
 def predict_visuality(model_path, test_path):
-    model_name = model_path.split("/")[-1]
+    model_name = os.path.basename(model_path)
     test_ds = tf.keras.utils.image_dataset_from_directory(
         test_path, labels='inferred', label_mode='int',
         class_names=None, color_mode='rgb', batch_size=32, image_size=(int(os.getenv("img_height")),
@@ -27,8 +27,6 @@ def predict_visuality(model_path, test_path):
     test_ds = test_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
     model = tf.keras.models.load_model(model_path)
-    y_test = np.concatenate([y for x, y in test_ds], axis=0)
-    X_test = np.concatenate([x for x, y in test_ds], axis=0)
 
     for image_batch, labels_batch in test_ds:
         print(image_batch.shape)
@@ -51,10 +49,10 @@ def predict_visuality(model_path, test_path):
             plt.title(true_class_name[n] + " | " + predicted_class_names[n])
         plt.axis('off')
     _ = plt.suptitle("ImageNet predictions", )
-    plt.savefig(f"visual_show_images/res-{os.path.basename(model_name)}.png")
+    plt.savefig(os.path.join("visual_show_images",f"{os.path.basename(model_name)}.png"))
 
 
 if __name__ == '__main__':
-    export_path = "model/" + input("input the model name\n")
+    export_path = os.path.join(os.getenv("model"), input("input the model name\n"))
     load_dotenv()
     predict_visuality(export_path, os.getenv("data_root"))

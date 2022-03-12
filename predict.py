@@ -6,9 +6,6 @@ import tensorflow as tf
 from sklearn.metrics import confusion_matrix, classification_report
 
 
-
-
-
 def reports(X_test, y_test, model, target_names):
     Y_pred = model.predict(X_test)
     y_pred = np.argmax(Y_pred, axis=1)
@@ -23,7 +20,7 @@ def reports(X_test, y_test, model, target_names):
 
 
 def predict_report(model_path, test_path):
-    model_name = model_path.split("/")[-1]
+    model_name = os.path.basename(model_path)
     test_ds = tf.keras.utils.image_dataset_from_directory(
         test_path, labels='inferred', label_mode='int',
         class_names=None, color_mode='rgb', batch_size=32, image_size=(int(os.getenv("img_height")),
@@ -46,7 +43,7 @@ def predict_report(model_path, test_path):
     classification, confusion, Test_loss, Test_accuracy = reports(X_test, y_test, model, class_names)
     classification = str(classification)
     confusion = str(confusion)
-    file_name = f'reports/{model_name}.txt'
+    file_name = os.path.join(os.getenv("reports"), f'{model_name}.txt')
     with open(file_name, 'w') as x_file:
         x_file.write('{} Test loss (%)'.format(Test_loss))
         x_file.write('\n')
@@ -60,6 +57,7 @@ def predict_report(model_path, test_path):
 
 if __name__ == '__main__':
     from dotenv import load_dotenv
+
     load_dotenv()
-    export_path = "model/" + input("input the model name\n")
+    export_path = os.path.join(os.getenv("model"), input("input the model name\n"))
     predict_report(export_path, os.getenv("data_root"))

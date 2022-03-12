@@ -32,7 +32,7 @@ def training(model: Model, dataset=None):
                         callbacks=tensorboard_callback)
 
     t = time.time()
-    export_path = "model/{}-{}".format(model.name, int(t))
+    export_path = os.path.join("model", "{}-{}".format(model.name, int(t)))
     model.save(export_path)
     return export_path
 
