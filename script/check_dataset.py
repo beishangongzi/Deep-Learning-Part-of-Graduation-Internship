@@ -26,4 +26,4 @@ num_each_class: {num_each_class}
 picture_size: {picture_size}""")
 
 if __name__ == '__main__':
-    check_dataset("Data/Data2/flower_photos")
+    check_dataset("../Data/Data2/flower_photos")
