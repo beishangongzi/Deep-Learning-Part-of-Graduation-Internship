@@ -2,6 +2,9 @@
 pre_model/
 model/
 Data*
+visual_show_images/
+reports
+logs
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
