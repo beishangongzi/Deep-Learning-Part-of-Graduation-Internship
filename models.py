@@ -1,14 +1,35 @@
 import os
 
 import keras
+import pydotplus
 import tensorflow as tf
 import tensorflow_hub as hub
 from environs import Env
 from keras.layers import Conv2D
+from keras.utils.vis_utils import plot_model
 
 env = Env()
 
+from functools import wraps
 
+
+def plot_file(logfile=env.str("plot_model", "image_of_model")):
+    def logging_decorator(func):
+        @wraps(func)
+        def wrapped_function(*args, **kwargs):
+            print(logfile)
+            model = func(*args, **kwargs)
+            keras.utils.vis_utils.pydot = pydotplus
+            file_path = os.path.join(logfile, model.name + ".png")
+            plot_model(model, file_path, show_shapes=True)
+            return model
+
+        return wrapped_function
+
+    return logging_decorator
+
+
+@plot_file()
 def mobile_v3_transfer_model(pre_model):
     mobilenet_v2 = os.path.join(env.str("pre_model"), pre_model)
 
@@ -28,6 +49,7 @@ def mobile_v3_transfer_model(pre_model):
     return model
 
 
+@plot_file()
 def toy_res_net(pre_model):
     """
     即使没有使用pre_model,也要声明，保持接口一致
@@ -51,5 +73,18 @@ def toy_res_net(pre_model):
     x = keras.layers.Dropout(0.5)(x)
     outputs = keras.layers.Dense(int(os.getenv("num_class")))(x)
     model = keras.Model(inputs, outputs, name="toy_resnet")
+    model.summary()
+    return model
+
+@plot_file()
+def toy_conv_net(pre_model):
+    inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3), name="img")
+    x = keras.layers.Conv2D(32, 3, activation="relu")(inputs)
+    x = keras.layers.Conv2D(64, 3, activation="relu")(x)
+    x = keras.layers.Dense(64, activation="relu")(x)
+    x = keras.layers.Flatten()(x)
+    x = keras.layers.Dropout(0.5)(x)
+    outputs = keras.layers.Dense(int(os.getenv("num_class")))(x)
+    model = keras.Model(inputs, outputs, name="toy_conv_net")
     model.summary()
     return model
