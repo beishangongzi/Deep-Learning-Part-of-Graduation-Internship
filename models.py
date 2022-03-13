@@ -104,6 +104,7 @@ def toy_conv_net2(pre_model):
     return model
 
 
+@plot_file()
 def restnet50(pre_model):
     base_model = ResNet50(weights="imagenet",
                           input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3), include_top=False)
@@ -117,6 +118,7 @@ def restnet50(pre_model):
     return model
 
 
+@plot_file()
 def restnet101(pre_model):
     base_model = ResNet101(weights="imagenet",
                            input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3),
