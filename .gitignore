@@ -6,6 +6,7 @@ visual_show_images/
 reports
 logs
 image_of_model/
+model_ckpt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
