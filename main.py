@@ -24,6 +24,8 @@ def begin_main():
         os.mkdir("pre_model")
     if not os.path.exists("logs/fit"):
         os.makedirs("logs/fit")
+    if not os.path.exists("model_ckpt"):
+        os.mkdir("model_ckpt")
 
 
 def main(unused_argv):
