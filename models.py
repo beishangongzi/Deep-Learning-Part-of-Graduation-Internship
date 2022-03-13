@@ -5,6 +5,7 @@ import pydotplus
 import tensorflow as tf
 import tensorflow_hub as hub
 from environs import Env
+from keras.applications.resnet import ResNet50, ResNet101
 from keras.layers import Conv2D
 from keras.utils.vis_utils import plot_model
 
@@ -76,6 +77,7 @@ def toy_res_net(pre_model):
     model.summary()
     return model
 
+
 @plot_file()
 def toy_conv_net(pre_model):
     inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3), name="img")
@@ -87,4 +89,42 @@ def toy_conv_net(pre_model):
     outputs = keras.layers.Dense(int(os.getenv("num_class")))(x)
     model = keras.Model(inputs, outputs, name="toy_conv_net")
     model.summary()
+    return model
+
+
+@plot_file()
+def toy_conv_net2(pre_model):
+    inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3), name="img")
+    x = keras.layers.Conv2D(10, 3, activation="relu")(inputs)
+    x = keras.layers.Flatten()(x)
+    x = keras.layers.Dropout(0.5)(x)
+    out_puts = keras.layers.Dense(int(os.getenv("num_class")))(x)
+    model = keras.Model(inputs, out_puts, name="toy_conv_net2")
+    model.summary()
+    return model
+
+
+def restnet50(pre_model):
+    base_model = ResNet50(weights="imagenet",
+                          input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3), include_top=False)
+    base_model.trainable = False
+    inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3))
+    x = base_model(inputs, training=False)
+    x = keras.layers.GlobalAvgPool2D()(x)
+    out_puts = keras.layers.Dense(int(os.getenv("num_class")))(x)
+    model = keras.Model(inputs, out_puts, name="resnet50")
+    model.summary()
+    return model
+
+
+def restnet101(pre_model):
+    base_model = ResNet101(weights="imagenet",
+                           input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3),
+                           include_top=False)
+    base_model.trainable = False
+    inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3))
+    x = base_model(inputs, training=False)
+    x = keras.layers.GlobalAvgPool2D()(x)
+    out_puts = keras.layers.Dense(int(os.getenv("num_class")))(x)
+    model = keras.Model(inputs, out_puts, name="resnet50")
     return model
