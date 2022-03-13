@@ -71,3 +71,9 @@
    1.  ` tensorboard --logdir logs/fit/`
 
       tensorboard 并不是很熟练，没能充分利用他的功能，需要完善。 比如目前所有的训练日志都存放到了fit中，没有使用不同的模型
+
+
+
+# 模型英文名字
+
+   `factory   farmland   forest   grassland   parking  'residential area'   water	`
