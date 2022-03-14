@@ -1,3 +1,5 @@
+import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -30,11 +32,18 @@ def main(unused_argv):
     if FLAGS.train:
         print(FLAGS.model)
         model = eval(FLAGS.model)(FLAGS.pre_model)
-
+        if FLAGS.continue_train is not None:
+            pre_weights = FLAGS.continue_train
+            if os.path.exists(os.path.join(os.getenv("model_dir"), pre_weights)):
+                pre_weights = os.path.join(os.getenv("model_dir", pre_weights))
+            else:
+                pre_weights = os.path.join(os.getenv("save_in_training"), model.name, pre_weights)
+                print(f"load weights from {pre_weights}")
+            model.load_weights(pre_weights)
         dataset = pathlib.Path(os.getenv("data_root"))
         export_path = training(model, dataset)
     else:
-        export_path = os.path.join("model", FLAGS.model)
+        export_path = os.path.join(os.getenv("model_dir"), FLAGS.model)
     predict_report(export_path, pathlib.Path(os.getenv("test_dir")))
     predict_visuality(export_path, pathlib.Path(os.getenv("test_dir")))
 
@@ -45,4 +54,5 @@ if __name__ == '__main__':
     tf.compat.v1.flags.DEFINE_string("model", os.getenv("model"), "model that used")
     tf.compat.v1.flags.DEFINE_bool("train", False if os.getenv("train") == "False" else True,
                                    "train a new model or use saved model")
+    tf.compat.v1.flags.DEFINE_string("continue_train", os.getenv("continue_train"), "continue train")
     tf.compat.v1.app.run()
