@@ -28,23 +28,28 @@
        内容
 
    ```bash
-   batch_size=32
-   img_height=224
-   img_width=224
-   NUM_EPOCHS=3
-   num_class=7
-   save_freq=3
-   data_root=./Data/Data_test
-   pre_model_dir=./pre_model/
-   test_dir=./Data/Data_test
-   log_dir=./logs/fit
-   reports=./reports
-   model=./model
-   visual_show_images=visual_show_images
-   plot_model_dir=./image_of_model
-   model=mobile_v3_transfer_model
-   pre_model=tf2-preview_mobilenet_v2_classification_4
-   train=True
+        batch_size=32
+        img_height=224
+        img_width=224
+        NUM_EPOCHS=30
+        num_class=7
+        save_freq=3
+
+        continue_train=cp_0032.ckpt
+
+        data_root=./Data/Data
+        pre_model_dir=./pre_model/
+        test_dir=./Data/Data_test
+        log_dir=./logs/fit
+        reports=./reports
+        model_dir=./model
+        visual_show_images=visual_show_images
+        plot_model_dir=./image_of_model
+        save_in_training=./model_ckpt
+
+        model=restnet50
+        pre_model=tf2-preview_mobilenet_v2_classification_4
+        train=True
    ```
    
 2. change the current path to the project
