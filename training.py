@@ -24,8 +24,8 @@ def training(model: Model, dataset=None):
     tensorboard_callback = tf.keras.callbacks.TensorBoard(
         log_dir=log_dir,
         histogram_freq=1)  # Enable histogram computation for every epoch.
-
-    checkpoint_path = os.path.join("model_ckpt", model.name, "cp_{epoch:04d}.ckpt")
+    t = datetime.datetime.day.__str__() + "-" + datetime.datetime.hour.__str__()
+    checkpoint_path = os.path.join("model_ckpt", model.name, t + "_cp_{epoch:04d}.ckpt")
     save_callback = keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_path,
         verbose=1,
