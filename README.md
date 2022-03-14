@@ -54,8 +54,11 @@
    需要训练模型
 
    1. `python main.py --modle=toy_res_net` # 使用自己写的模型
-   2. `python main.py --modle=mobile_v3_transfer_model --pre_model=bit_m-r50x1_imagenet21k_classification_1 `#[迁移学习模型](https://tfhub.dev/s?module-type=image-classification)
-   3. `python main.py`  默认使用的是
+
+        如果使用的是keras模型， 比如resnet101, 那么他的保存路径是`~/.keras/datasets/example.txt`和`/home/andy/.keras/models/example.h5`，方便网络不好的时候自己存入
+        
+   3. `python main.py --modle=mobile_v3_transfer_model --pre_model=bit_m-r50x1_imagenet21k_classification_1 `#[迁移学习模型](https://tfhub.dev/s?module-type=image-classification)
+   4. `python main.py`  默认使用的是
 
    使用已经存在的模型
 
