@@ -7,6 +7,7 @@ reports
 logs
 image_of_model/
 model_ckpt
+*.tar
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
