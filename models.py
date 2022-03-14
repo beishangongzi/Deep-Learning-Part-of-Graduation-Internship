@@ -1,20 +1,16 @@
 import os
+from functools import wraps
 
 import keras
 import pydotplus
 import tensorflow as tf
 import tensorflow_hub as hub
-from environs import Env
 from keras.applications.resnet import ResNet50, ResNet101
 from keras.layers import Conv2D
 from keras.utils.vis_utils import plot_model
 
-env = Env()
 
-from functools import wraps
-
-
-def plot_file(logfile=env.str("plot_model", "image_of_model")):
+def plot_file(logfile=os.getenv("plot_model_dir")):
     def logging_decorator(func):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
@@ -22,7 +18,10 @@ def plot_file(logfile=env.str("plot_model", "image_of_model")):
             model = func(*args, **kwargs)
             keras.utils.vis_utils.pydot = pydotplus
             file_path = os.path.join(logfile, model.name + ".png")
-            plot_model(model, file_path, show_shapes=True)
+            try:
+                plot_model(model, file_path, show_shapes=True)
+            except ImportError as e:
+                print(e)
             return model
 
         return wrapped_function
@@ -32,7 +31,7 @@ def plot_file(logfile=env.str("plot_model", "image_of_model")):
 
 @plot_file()
 def mobile_v3_transfer_model(pre_model):
-    mobilenet_v2 = os.path.join(env.str("pre_model"), pre_model)
+    mobilenet_v2 = os.path.join(os.getenv("pre_model_dir"), pre_model)
 
     classifier_model = mobilenet_v2
 

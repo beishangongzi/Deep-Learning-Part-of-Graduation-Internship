@@ -1,0 +1,14 @@
+version: "3"
+services:
+  tensorflow:
+    image: "tf2-gpu:v1"
+    container_name: "tf_2_test_1"
+    ports:
+      - "6006:6006"
+    volumes:
+      - "/media/rs/z/python/毕业实习/app/deep_learning/:/deep-learning/"
+    command: ["python", "main.py", "--model=restnet50"]
+
+  test:
+    image: "tf2-gpu:v1"
+    command: python -c "import tensorflow as tf;print(tf.test.gpu_device_name(), 123); from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())"

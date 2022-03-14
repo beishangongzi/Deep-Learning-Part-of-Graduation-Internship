@@ -1,0 +1,12 @@
+version: "3"
+services:
+  tensorflow:
+    image: "tf2:v1"
+    container_name: "tf_2_test_1"
+    ports:
+      - "6006:6006"
+    volumes:
+      - "/media/andy/z/python/毕业实习/app/deep_learning/:/deep-learning/"
+    env_file:
+      - "./../../.env"
+    command: ["python", "main.py"]

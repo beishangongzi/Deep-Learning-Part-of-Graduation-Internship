@@ -1,7 +1,8 @@
-import os
-import pathlib
-
 from dotenv import load_dotenv
+
+load_dotenv()
+
+import pathlib
 
 from models import *
 from predict import predict_report
@@ -25,9 +26,9 @@ def begin_main():
 
 
 def main(unused_argv):
-    load_dotenv()
     begin_main()
     if FLAGS.train:
+        print(FLAGS.model)
         model = eval(FLAGS.model)(FLAGS.pre_model)
 
         dataset = pathlib.Path(os.getenv("data_root"))
@@ -40,9 +41,8 @@ def main(unused_argv):
 
 if __name__ == '__main__':
     FLAGS = tf.compat.v1.flags.FLAGS
-
-    tf.compat.v1.flags.DEFINE_string('pre_model', os.getenv("model"), 'the pre model')
-    tf.compat.v1.flags.DEFINE_string("model", os.getenv("pre_model"), "model that used")
+    tf.compat.v1.flags.DEFINE_string('pre_model', os.getenv("pre_model"), 'the pre model')
+    tf.compat.v1.flags.DEFINE_string("model", os.getenv("model"), "model that used")
     tf.compat.v1.flags.DEFINE_bool("train", False if os.getenv("train") == "False" else True,
                                    "train a new model or use saved model")
     tf.compat.v1.app.run()

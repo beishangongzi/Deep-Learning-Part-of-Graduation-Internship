@@ -1,4 +1,4 @@
-# Deep-Learning-Part-of-Graduation-Internship
+# Deep-Learning-Part-of-Gradua~~t~~ion-Internship
 
 这是毕业实习深度学习部分
 
@@ -31,24 +31,22 @@
    batch_size=32
    img_height=224
    img_width=224
-   NUM_EPOCHS=32
+   NUM_EPOCHS=3
    num_class=7
-   save_freq=1
-   data_root="./Data/Data"
-   pre_model="./pre_model/"
-   test_dir="./Data/Data_test"
-   log_dir="./logs/fit"
-   reports="./reports"
-   model="./model"
-   visual_show_images="visual_show_images"
-   plot_model=./image_of_model
-   
-   
+   save_freq=3
+   data_root=./Data/Data_test
+   pre_model_dir=./pre_model/
+   test_dir=./Data/Data_test
+   log_dir=./logs/fit
+   reports=./reports
+   model=./model
+   visual_show_images=visual_show_images
+   plot_model_dir=./image_of_model
    model=mobile_v3_transfer_model
-   pre_model=bit_m-r50x1_imagenet21k_classification_1
+   pre_model=tf2-preview_mobilenet_v2_classification_4
    train=True
    ```
-
+   
 2. change the current path to the project
 
 3. 
@@ -71,3 +69,46 @@
    1.  ` tensorboard --logdir logs/fit/`
 
       tensorboard 并不是很熟练，没能充分利用他的功能，需要完善。 比如目前所有的训练日志都存放到了fit中，没有使用不同的模型
+   
+5. gpu支持
+
+   1. 学校机房的电脑不是我自己用的，我也不太理解如何配置支持gpu，为了更加保险，选择使用docker
+
+      1. install docker
+
+      2. install nvidia-docker
+      
+         ```bash
+         # Add the package repositories
+         $ distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+         $ curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+         $ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+         
+         $ sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+         $ sudo systemctl restart docker
+         ```
+      
+         Install nvidia-docker2 and reload the Docker daemon configuration
+         
+         ```bash
+         $sudo apt-get install -y nvidia-docker2
+         $sudo pkill -SIGHUP dockerd
+         ```
+         
+         测试
+         
+         ```bash
+         docker run --runtime=nvidia -rm nvidia/cuda:9.0-base nvidia-smi
+         ```
+         
+         下载tensorflow
+         
+         在docker/gpu下运行`docker build -t tf2-gpu:v1`
+         
+         在docker/gpu下运行`docker-compose up`
+         
+         运行的模型在docker-compose 中修改需要运行的参数,或者在.env中修改
+
+# 模型英文名字
+
+   `factory   farmland   forest   grassland   parking  'residential area'   water	`
