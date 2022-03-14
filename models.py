@@ -22,7 +22,10 @@ def plot_file(logfile=env.str("plot_model", "image_of_model")):
             model = func(*args, **kwargs)
             keras.utils.vis_utils.pydot = pydotplus
             file_path = os.path.join(logfile, model.name + ".png")
-            plot_model(model, file_path, show_shapes=True)
+            try:
+                plot_model(model, file_path, show_shapes=True)
+            except ImportError as e:
+                print(e)
             return model
 
         return wrapped_function
