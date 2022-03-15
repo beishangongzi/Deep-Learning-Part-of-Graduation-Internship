@@ -127,5 +127,5 @@ def restnet101(pre_model):
     x = base_model(inputs, training=False)
     x = keras.layers.GlobalAvgPool2D()(x)
     out_puts = keras.layers.Dense(int(os.getenv("num_class")))(x)
-    model = keras.Model(inputs, out_puts, name="resnet50")
+    model = keras.Model(inputs, out_puts, name="resnet101")
     return model
