@@ -62,8 +62,14 @@
 
         如果使用的是keras模型， 比如resnet101, 那么他的保存路径是`~/.keras/datasets/example.txt`和`/home/andy/.keras/models/example.h5`，方便网络不好的时候自己存入
         
-   3. `python main.py --modle=mobile_v3_transfer_model --pre_model=bit_m-r50x1_imagenet21k_classification_1 `#[迁移学习模型](https://tfhub.dev/s?module-type=image-classification)
-   4. `python main.py`  默认使用的是
+   2. `python main.py --modle=mobile_v3_transfer_model --pre_model=bit_m-r50x1_imagenet21k_classification_1 `#[迁移学习模型](https://tfhub.dev/s?module-type=image-classification)
+
+   3. `python main.py`  默认使用的是
+
+   4. 后台运行
+
+        1. 启动 `nohup python -u main.py > daemon/name.log 2>&1 & echo $! > daemon/run.pid`
+        2. 停止 `[[ -f daemon/run.pid ]] && kill $(cat daemon/run.pid)`
 
    使用已经存在的模型
 

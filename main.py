@@ -25,6 +25,8 @@ def begin_main():
         os.makedirs("logs/fit")
     if not os.path.exists("model_ckpt"):
         os.makedirs("model_ckpt")
+    if not os.path.exists("daemon"):
+        os.mkdir("daemon")
 
 
 def main(unused_argv):
