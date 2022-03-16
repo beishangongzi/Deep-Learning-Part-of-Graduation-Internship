@@ -4,11 +4,12 @@ import pathlib
 
 def split_to_test_dataset(src_dir, target_dir):
     for class_dir in os.listdir(src_dir):
-        files = os.listdir(pathlib.Path(src_dir, class_dir))[-50:]
+        files = os.listdir(pathlib.Path(src_dir, class_dir))
         print(files)
         if len(files) < 440:
             print("file number is too small")
             continue
+        files = files[-50:]
         for file in files:
             old_name = pathlib.Path(src_dir, class_dir, file)
             new_name = pathlib.Path(target_dir, class_dir, file)
