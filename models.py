@@ -107,9 +107,10 @@ def toy_conv_net2(pre_model):
 def restnet50(pre_model):
     base_model = ResNet50(weights="imagenet",
                           input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3), include_top=False)
-    base_model.trainable = False
+    flag = False if os.getenv("transfer_learning_trainable") == "False" else True
+    base_model.trainable = flag
     inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3))
-    x = base_model(inputs, training=False)
+    x = base_model(inputs, training=flag)
     x = keras.layers.GlobalAvgPool2D()(x)
     out_puts = keras.layers.Dense(int(os.getenv("num_class")))(x)
     model = keras.Model(inputs, out_puts, name="resnet50")
@@ -122,9 +123,9 @@ def restnet101(pre_model):
     base_model = ResNet101(weights="imagenet",
                            input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3),
                            include_top=False)
-    base_model.trainable = False
+    base_model.trainable = False if os.getenv("transfer_learning_trainable") == "False" else True
     inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3))
-    x = base_model(inputs, training=False)
+    x = base_model(inputs, training=False if os.getenv("transfer_learning_trainable") == "False" else True)
     x = keras.layers.GlobalAvgPool2D()(x)
     out_puts = keras.layers.Dense(int(os.getenv("num_class")))(x)
     model = keras.Model(inputs, out_puts, name="resnet101")
