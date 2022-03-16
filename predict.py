@@ -31,8 +31,8 @@ def predict_report(model_path, test_path):
         crop_to_aspect_ratio=False,
     )
     class_names = np.array(test_ds.class_names)
-    normalization_layer = tf.keras.layers.Rescaling(1. / 255)
-    test_ds = test_ds.map(lambda x, y: (normalization_layer(x), y))  # Where x—images, y—labels.
+    # normalization_layer = tf.keras.layers.Rescaling(1. / 255)
+    # test_ds = test_ds.map(lambda x, y: (normalization_layer(x), y))  # Where x—images, y—labels.
 
     AUTOTUNE = tf.data.AUTOTUNE
     test_ds = test_ds.cache().prefetch(buffer_size=AUTOTUNE)
