@@ -23,7 +23,8 @@ def training(model: Model, dataset=None):
     model.compile(
         optimizer=tf.keras.optimizers.Adam(lr_schedule),
         loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=['acc'])
+        # loss="categorical_crossentropy",
+        metrics=['acc', "mae"])
 
     log_dir = os.path.join(os.getenv("log_dir"), datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     tensorboard_callback = tf.keras.callbacks.TensorBoard(
