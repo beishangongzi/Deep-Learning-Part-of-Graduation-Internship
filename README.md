@@ -70,6 +70,31 @@
 
         1. 启动 `nohup python -u main.py > daemon/name.log 2>&1 & echo $! > daemon/run.pid`
         2. 停止 `[[ -f daemon/run.pid ]] && kill $(cat daemon/run.pid)`
+        
+   5. 远程运行
+
+        ```bash
+        # add public key(or just skip this step)
+        ssh-copy-id -p 31026 -i ~/.ssh/id_rsa.pub user@50m1x60610.qicp.vip
+        
+        # 连接ssh
+        ssh user@50m1x60610.qicp.vip -p 31026
+        
+        # change to project directory
+        cd ~/andy/Deep-Learning-Part-of-Graduation-Internship/
+        
+        # actiate the python environment
+        source ~/andy/python-venv/tf2-v2/bin/activate
+        
+        # 后台运行
+        #最好修改name.log, run.pid的名字，防止覆盖上一次的日志
+        nohup python -u main.py > daemon/name.log 2>&1 & echo $! > daemon/run.pid
+        
+        # 查看训练日志
+        tail daemon/name.log
+        ```
+
+        
 
    使用已经存在的模型
 
@@ -84,7 +109,7 @@
 
       tensorboard 并不是很熟练，没能充分利用他的功能，需要完善。 比如目前所有的训练日志都存放到了fit中，没有使用不同的模型
    
-5. gpu支持
+5. gpu支持(好像并没这么弄好，最后重新安装了cuda)
 
    1. 学校机房的电脑不是我自己用的，我也不太理解如何配置支持gpu，为了更加保险，选择使用docker
 
