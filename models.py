@@ -39,11 +39,11 @@ def mobile_v3_transfer_model(pre_model):
     mobilenet_v2 = os.path.join(os.getenv("pre_model_dir"), pre_model)
 
     classifier_model = mobilenet_v2
-
+    flag = False if os.getenv("transfer_learning_trainable") == "False" else True
     feature_extractor_layer = hub.KerasLayer(
         classifier_model,
         input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3),
-        trainable=False)
+        trainable=flag)
 
     model = tf.keras.Sequential([
         # data_augmentation,
