@@ -7,6 +7,7 @@ import pydotplus
 import tensorflow as tf
 import tensorflow_hub as hub
 from keras.applications.resnet import ResNet50, ResNet101
+from keras.applications.vgg16 import VGG16
 from keras.layers import Conv2D, BatchNormalization, MaxPool2D, GlobalAveragePooling2D, Flatten, Dense, Add
 from keras.models import Model
 from keras.utils.vis_utils import plot_model
@@ -131,6 +132,20 @@ def restnet101(pre_model):
     x = keras.layers.GlobalAvgPool2D()(x)
     out_puts = keras.layers.Dense(int(os.getenv("num_class")))(x)
     model = keras.Model(inputs, out_puts, name="resnet101")
+    return model
+
+
+@plot_file()
+def vgg16(pre_model):
+    base_model = VGG16(weights="imagenet",
+                       input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3),
+                       include_top=False)
+    base_model.trainable = False if os.getenv("transfer_learning_trainable") == "False" else True
+    inputs = keras.Input(shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3))
+    x = base_model(inputs, training=False if os.getenv("transfer_learning_trainable") == "False" else True)
+    x = keras.layers.GlobalAvgPool2D()(x)
+    out_puts = keras.layers.Dense(int(os.getenv("num_class")), activation="softmax")(x)
+    model = keras.Model(inputs, out_puts, name="vgg16")
     return model
 
 
