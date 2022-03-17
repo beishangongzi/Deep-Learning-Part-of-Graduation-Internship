@@ -6,9 +6,11 @@ import keras
 import pydotplus
 import tensorflow as tf
 import tensorflow_hub as hub
+from keras import Sequential
 from keras.applications.resnet import ResNet50, ResNet101
 from keras.applications.vgg16 import VGG16
-from keras.layers import Conv2D, BatchNormalization, MaxPool2D, GlobalAveragePooling2D, Flatten, Dense, Add
+from keras.layers import Conv2D, BatchNormalization, MaxPool2D, GlobalAveragePooling2D, Flatten, Dense, Add, \
+    MaxPooling2D, Rescaling
 from keras.models import Model
 from keras.utils.vis_utils import plot_model
 
@@ -242,4 +244,25 @@ def restnet18(pre_model):
     model.build(input_shape=(None, int(os.getenv("img_height")), int(os.getenv("img_width")), 3))
     model.summary()
     print(model.name)
+    return model
+
+
+@plot_file()
+def vgg16_new(pre_model):
+    model = Sequential(name="vgg16_new")
+    model.add(Rescaling(scale=1.0 / 255, input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3)))
+    model.add(Conv2D(32, (3, 3), strides=(1, 1), activation='relu', padding='same'))
+    # input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3)))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(64, (3, 3), strides=(1, 1), padding='same', activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(128, (3, 3), strides=(1, 1), padding='same', activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(256, (3, 3), strides=(1, 1), padding='same', activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(64, activation='relu'))
+    model.add(Dense(int(os.getenv("num_class")), activation='softmax'))
+    model.summary()
     return model
