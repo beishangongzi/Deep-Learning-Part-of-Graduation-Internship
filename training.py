@@ -31,7 +31,7 @@ def training(model: Model, dataset=None):
         log_dir=log_dir,
         histogram_freq=1)  # Enable histogram computation for every epoch.
     # t = datetime.datetime.now().day.__str__() + "-" + datetime.datetime.now().hour.__str__() + datetime.datetime.now().minute.__str__()
-    checkpoint_path = os.path.join(os.getenv("model"), model.name, "_cp_best.ckpt")
+    checkpoint_path = os.path.join(os.getenv("model_dir"), model.name, "_cp_best.ckpt")
     save_callback = keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_path,
         verbose=1,
@@ -48,7 +48,7 @@ def training(model: Model, dataset=None):
                         callbacks=[tensorboard_callback, save_callback])
 
     t = time.time()
-    export_path = os.path.join("model", "{}-{}".format(model.name, int(t)))
+    export_path = os.path.join(os.getenv("model_dir"), model.name, "{best}")
     model.save(export_path)
     return export_path
 
