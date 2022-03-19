@@ -22,7 +22,7 @@ def training(model: Model, dataset=None):
     optimizer = tf.keras.optimizers.SGD(learning_rate=lr_schedule)
     model.compile(
         optimizer=tf.keras.optimizers.Adam(lr_schedule),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
         # loss="categorical_crossentropy",
         metrics=['acc', "mae"])
 
