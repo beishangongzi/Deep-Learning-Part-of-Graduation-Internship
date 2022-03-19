@@ -38,7 +38,7 @@ def predict_report(model_path, test_path):
     classification, confusion, Test_loss, Test_accuracy = reports(X_test, y_test, model, class_names)
     classification = str(classification)
     confusion = str(confusion)
-    file_name = os.path.join(os.getenv("reports"), f'{model_name}.txt')
+    file_name = os.path.join(env.str("reports"), f'{model_name}.txt')
     with open(file_name, 'w') as x_file:
         x_file.write('{} Test loss (%)'.format(Test_loss))
         x_file.write('\n')
@@ -58,5 +58,5 @@ if __name__ == '__main__':
     img_width = env.int("img_width", 200)
     test_dir = env.str("test_dir", "./../Data/Data_test")
     epochs = env.int("epochs")
-    export_path = os.path.join(os.getenv("model"), input("input the model name\n"))
-    predict_report(export_path, os.getenv("data_root"))
+    export_path = os.path.join(input("input the model name\n"))
+    predict_report(export_path, test_dir)

@@ -52,7 +52,7 @@ def main(unused_argv):
 
 if __name__ == '__main__':
     FLAGS = tf.compat.v1.flags.FLAGS
-    tf.compat.v1.flags.DEFINE_string('pre_model', os.getenv("pre_model"), 'the pre model')
+    tf.compat.v1.flags.DEFINE_string('pre_model', os.getenv("pre_model"), 'the pre model)
     tf.compat.v1.flags.DEFINE_string("model", os.getenv("model"), "model that used")
     tf.compat.v1.flags.DEFINE_bool("train", False if os.getenv("train") == "False" else True,
                                    "train a new model or use saved model")
