@@ -1,3 +1,5 @@
+import datetime
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -10,8 +12,8 @@ from keras.models import Sequential
 
 
 batch_size = 32
-img_height = 180
-img_width = 180
+img_height = 200
+img_width = 200
 data_dir = "./../Data/Data"
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -79,10 +81,25 @@ model.compile(optimizer='adam',
 
 
 model.summary()
-
+checkpoint_path = os.path.join(os.getenv("model_dir"), model.name, "_cp_best.ckpt")
+save_callback = keras.callbacks.ModelCheckpoint(
+  filepath=checkpoint_path,
+  verbose=1,
+  save_weights_only=False,
+  # save_freq=int(os.getenv("save_freq")) * int(os.getenv("batch_size"))
+  save_best_only=True
+)
+log_dir = os.path.join(os.getenv("log_dir"), datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+tensorboard_callback = tf.keras.callbacks.TensorBoard(
+  log_dir=log_dir,
+  histogram_freq=1)  # Enable histogram computation for every epoch.
 epochs = 15
 history = model.fit(
   train_ds,
   validation_data=val_ds,
-  epochs=epochs
+  epochs=epochs,
+  callbacks=[]
 )
+export_path = os.path.join(os.getenv("model_dir"), model.name, "{best}")
+model.save(export_path)
+print(export_path)
