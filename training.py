@@ -30,13 +30,14 @@ def training(model: Model, dataset=None):
     tensorboard_callback = tf.keras.callbacks.TensorBoard(
         log_dir=log_dir,
         histogram_freq=1)  # Enable histogram computation for every epoch.
-    t = datetime.datetime.now().day.__str__() + "-" + datetime.datetime.now().hour.__str__() + datetime.datetime.now().minute.__str__()
-    checkpoint_path = os.path.join("model_ckpt", model.name, t + "_cp_{epoch:04d}.ckpt")
+    # t = datetime.datetime.now().day.__str__() + "-" + datetime.datetime.now().hour.__str__() + datetime.datetime.now().minute.__str__()
+    checkpoint_path = os.path.join(os.getenv("model"), model.name, "_cp_best.ckpt")
     save_callback = keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_path,
         verbose=1,
         save_weights_only=False,
-        save_freq=int(os.getenv("save_freq")) * int(os.getenv("batch_size"))
+        # save_freq=int(os.getenv("save_freq")) * int(os.getenv("batch_size"))
+        save_best_only=True
     )
 
     NUM_EPOCHS = int(os.getenv("NUM_EPOCHS"))
