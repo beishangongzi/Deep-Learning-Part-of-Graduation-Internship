@@ -14,6 +14,8 @@ from keras.layers import Conv2D, BatchNormalization, MaxPool2D, GlobalAveragePoo
 from keras.models import Model
 from keras.utils.vis_utils import plot_model
 
+from data_augmentation import data_augmentation
+
 
 def plot_file(logfile=os.getenv("plot_model_dir")):
     def logging_decorator(func):
@@ -250,9 +252,9 @@ def restnet18(pre_model):
 @plot_file()
 def vgg16_new(pre_model):
     model = Sequential(name="vgg16_new")
-    model.add(Rescaling(scale=1.0 / 255, input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3)))
+    data_augmentation(input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3))
+    model.add(Rescaling(scale=1.0 / 255 ))
     model.add(Conv2D(32, (3, 3), strides=(1, 1), activation='relu', padding='same'))
-    # input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3)))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Conv2D(64, (3, 3), strides=(1, 1), padding='same', activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
