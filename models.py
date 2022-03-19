@@ -252,7 +252,7 @@ def restnet18(pre_model):
 @plot_file()
 def vgg16_new(pre_model):
     model = Sequential(name="vgg16_new")
-    data_augmentation(input_shape=(int(os.getenv("img_height")), int(os.getenv("img_width")), 3))
+    model.add(data_augmentation)
     model.add(Rescaling(scale=1.0 / 255 ))
     model.add(Conv2D(32, (3, 3), strides=(1, 1), activation='relu', padding='same'))
     model.add(MaxPooling2D(pool_size=(2, 2)))

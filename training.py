@@ -52,3 +52,9 @@ def training(model: Model, dataset=None):
     model.save(export_path)
     return export_path
 
+if __name__ == '__main__':
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    from models import vgg16_new
+    path = training(vgg16_new(""))
